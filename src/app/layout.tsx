@@ -1,38 +1,44 @@
-import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/app/components/Navbar";
-import Footer from "./components/Footer";
-import { AuthProvider } from "@/context/AuthContext";
-import { ThemeProvider } from "@/context/ThemeContext";
+import React from 'react';
+import { ThemeProvider, useTheme } from '../context/ThemeContext.tsx';
+import { AuthProvider } from '../context/AuthContext.tsx';
+import { Navbar } from '../components/Navbar.tsx';
+import { Footer } from '../components/Footer.tsx';
+import { Toaster } from 'sonner';
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta-sans",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-});
+interface LayoutProps {
+  children: React.ReactNode;
+  currentPath?: string;
+  navigate?: (path: string) => void;
+}
 
-export const metadata: Metadata = {
-  title: "StudioSpace — Peer-to-Peer Creative Workspaces",
-  description:
-    "The premier marketplace connecting creators with production studios, soundstages, and audio suites worldwide.",
-};
+function LayoutContent({ children, currentPath = '/', navigate = () => {} }: LayoutProps) {
+  const { theme } = useTheme();
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${plusJakartaSans.variable} h-full antialiased selection:bg-primary selection:text-white`}
-    >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
-        <AuthProvider>
-          <ThemeProvider>
-            <Navbar />
-          </ThemeProvider>
-        </AuthProvider>
-        <main className="flex-1">{children}</main>
-        <Footer />
-      </body>
-    </html>
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors">
+      <Navbar currentPath={currentPath} navigate={navigate} />
+      <main className="flex-1 w-full">
+        {children}
+      </main>
+      <Footer navigate={navigate} />
+      <Toaster
+        theme={theme === 'dark' ? 'dark' : 'light'}
+        position="top-right"
+        richColors
+        closeButton
+      />
+    </div>
   );
 }
+
+export const RootLayout: React.FC<LayoutProps> = (props) => {
+  return (
+    <ThemeProvider>
+      <AuthProvider>
+        <LayoutContent {...props} />
+      </AuthProvider>
+    </ThemeProvider>
+  );
+};
+
+export default RootLayout;
