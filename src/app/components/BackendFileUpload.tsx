@@ -50,7 +50,7 @@ export const BackendFileUpload: React.FC<BackendFileUploadProps> = ({
     setCustomUrl(value);
   }, [value]);
 
-  // Load files from backend file system when storage tab is opened
+  
   const fetchBackendFiles = async () => {
     setLoadingFiles(true);
     try {
