@@ -1,141 +1,219 @@
-"use client";
-import { useState } from "react";
-import Link from "next/link";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
-import { ApertureLogo } from "./ApertureLogo";
+import React, { useState } from 'react';
+import { toast } from 'sonner';
 
-/* Inline brand icons (lucide-react no longer ships brand logos). */
-type IconProps = { className?: string };
-
-function XLogo({ className = "h-[18px] w-[18px]" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-  );
-}
-const stroke = { fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" } as const;
-
-function InstagramIcon({ className = "h-[18px] w-[18px]" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" {...stroke} className={className} aria-hidden>
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-    </svg>
-  );
-}
-function YouTubeIcon({ className = "h-[18px] w-[18px]" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" {...stroke} className={className} aria-hidden>
-      <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
-      <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
-    </svg>
-  );
-}
-function LinkedInIcon({ className = "h-[18px] w-[18px]" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" {...stroke} className={className} aria-hidden>
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect x="2" y="9" width="4" height="12" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  );
-}
-function GitHubIcon({ className = "h-[18px] w-[18px]" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" {...stroke} className={className} aria-hidden>
-      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-    </svg>
-  );
+interface FooterProps {
+  navigate: (path: string) => void;
 }
 
-const CATEGORIES = [["Photo Studios", "photo"], ["Sound Stages", "sound"], ["Podcast Rooms", "podcast"], ["Music Suites", "music"], ["Art Workshops", "art"]];
-const PLATFORM = [["List Your Studio", "/studios/new"], ["How Booking Works", "/how-it-works"], ["$1M Host Guarantee", "/guarantee"], ["Transparent Pricing", "/pricing"], ["Creator Guidelines", "/guidelines"], ["Safety & Verification", "/safety"]];
-const SOCIAL = [
-  { label: "X (Twitter)", href: "https://x.com", node: <XLogo /> },
-  { label: "Instagram", href: "https://instagram.com", node: <InstagramIcon /> },
-  { label: "YouTube", href: "https://youtube.com", node: <YouTubeIcon /> },
-  { label: "LinkedIn", href: "https://linkedin.com", node: <LinkedInIcon /> },
-  { label: "GitHub", href: "https://github.com", node: <GitHubIcon /> },
-];
-const linkCls = "text-sm text-slate-600 transition-colors hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400";
-const head = "text-sm font-bold text-slate-900 dark:text-white";
+export const Footer: React.FC<FooterProps> = ({ navigate }) => {
+  const [email, setEmail] = useState('');
 
-export default function Footer() {
-  const [email, setEmail] = useState("");
-  const [done, setDone] = useState(false);
-  const submit = (e: React.FormEvent) => {
+  const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
-    setDone(true); setEmail("");
-    setTimeout(() => setDone(false), 4000);
+    if (!email || !email.includes('@')) {
+      toast.error('Please enter a valid email address');
+      return;
+    }
+    toast.success('Thank you for subscribing to StudioSpace Creator Dispatch!');
+    setEmail('');
   };
 
   return (
-    <footer className="border-t border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
-        <div>
-          <Link href="/" className="flex items-center gap-2.5">
-            <ApertureLogo />
-            <span className="text-lg font-bold tracking-tight text-slate-900 dark:text-white">StudioSpace</span>
-          </Link>
-          <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-600 dark:text-slate-300">
-            Connecting creators, directors, audio engineers, and photographers with extraordinary production spaces worldwide.
-          </p>
-          <p className="mt-4 text-sm text-slate-700 dark:text-slate-200">
-            <a href="mailto:support@studiospace.io" className="hover:text-indigo-500">support@studiospace.io</a> | <a href="tel:+1800555788346" className="hover:text-indigo-500">+1 (800) 555-STUDIO</a>
-          </p>
-        </div>
-
-        <div>
-          <h3 className={head}>Studio Categories</h3>
-          <ul className="mt-4 space-y-2.5">
-            {CATEGORIES.map(([l, c]) => <li key={c}><Link className={linkCls} href={`/studios?category=${c}`}>{l}</Link></li>)}
-          </ul>
-        </div>
-
-        <div>
-          <h3 className={head}>Platform & Hosts</h3>
-          <ul className="mt-4 space-y-2.5">
-            {PLATFORM.map(([l, h]) => <li key={h}><Link className={linkCls} href={h}>{l}</Link></li>)}
-          </ul>
-        </div>
-
-        <div>
-          <h3 className={head}>Join the Creator Network</h3>
-          <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-300">Receive exclusive invites to new stage openings, gear discounts, and off-peak rate drops.</p>
-          <form onSubmit={submit} className="relative mt-4">
-            <label htmlFor="newsletter" className="sr-only">Email address</label>
-            <input id="newsletter" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@studio.com"
-              className="w-full rounded-full border border-slate-300 bg-white py-3 pl-5 pr-14 text-sm text-slate-900 placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/30 dark:border-slate-700 dark:bg-slate-900 dark:text-white dark:placeholder:text-slate-400" />
-            <button type="submit" aria-label="Subscribe" className="absolute right-1.5 top-1/2 grid h-9 w-9 -translate-y-1/2 place-items-center rounded-full bg-indigo-600 text-white transition hover:bg-indigo-500">
-              <ArrowRight className="h-4 w-4" />
+    <footer className="w-full bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 pt-16 pb-12 transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-200 dark:border-slate-800/60">
+          
+          {/* Brand & Mission Statement */}
+          <div className="lg:col-span-2 space-y-4">
+            <button
+              onClick={() => navigate('/')}
+              className="flex items-center gap-3 text-left group focus:outline-none cursor-pointer"
+            >
+              <div className="w-9 h-9 rounded-xl bg-indigo-600/10 dark:bg-indigo-600/20 border border-indigo-500/30 dark:border-indigo-500/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                <svg
+                  className="w-5 h-5 text-indigo-600 dark:text-indigo-400"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="14.31" y1="8" x2="20.05" y2="17.94" />
+                  <line x1="9.69" y1="8" x2="21.17" y2="8" />
+                  <line x1="7.38" y1="12" x2="13.12" y2="2.06" />
+                  <line x1="9.69" y1="16" x2="3.95" y2="6.06" />
+                  <line x1="14.31" y1="16" x2="2.83" y2="16" />
+                  <line x1="16.62" y1="12" x2="10.88" y2="21.94" />
+                </svg>
+              </div>
+              <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                Studio<span className="text-indigo-600 dark:text-indigo-400">Space</span>
+              </span>
             </button>
-          </form>
-          <p role="status" aria-live="polite" className={`mt-3 flex items-center gap-2 text-sm font-medium text-emerald-600 transition-opacity dark:text-emerald-400 ${done ? "opacity-100" : "opacity-0"}`}>
-            <CheckCircle2 className="h-4 w-4" /> You’re in. Check your inbox to confirm.
-          </p>
-        </div>
-      </div>
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-sm">
+              The peer-to-peer marketplace uniting visionary photographers, audio engineers, filmmakers, and studio hosts. Seamlessly reserve creative workspaces with guaranteed availability and transparent hourly rates.
+            </p>
+            
+            {/* Social Icons including the new X logo */}
+            <div className="flex items-center gap-3 pt-2">
+              {/* New X Logo */}
+              <a
+                href="https://x.com"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Follow StudioSpace on X"
+                className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-slate-700 transition-colors"
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+              </a>
 
-      <div className="border-t border-slate-200 dark:border-slate-800">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-6 sm:px-6 md:flex-row lg:px-8">
-          <p className="text-xs text-slate-600 dark:text-slate-400">© 2026 StudioSpace Inc. All rights reserved.</p>
-          <p className="flex flex-wrap justify-center gap-x-2 text-xs text-slate-600 dark:text-slate-400">
-            <Link href="/privacy" className="hover:text-indigo-500">Privacy Policy</Link> ·
-            <Link href="/terms" className="hover:text-indigo-500">Terms of Service</Link> ·
-            <Link href="/security" className="hover:text-indigo-500">Security & Escrow</Link>
-          </p>
-          <ul className="flex items-center gap-4">
-            {SOCIAL.map((s) => (
-              <li key={s.label}>
-                <a href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} className="text-slate-600 transition-colors hover:text-indigo-500 dark:text-slate-300">{s.node}</a>
+              {/* Instagram */}
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Instagram"
+                className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-slate-700 transition-colors"
+              >
+                <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
+              </a>
+
+              {/* YouTube */}
+              <a
+                href="https://youtube.com"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="YouTube"
+                className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-slate-700 transition-colors"
+              >
+                <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
+                  <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor" />
+                </svg>
+              </a>
+
+              {/* LinkedIn */}
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="LinkedIn"
+                className="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:border-slate-400 dark:hover:border-slate-700 transition-colors"
+              >
+                <svg className="w-4 h-4 fill-none stroke-current" strokeWidth="2" viewBox="0 0 24 24">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                  <rect x="2" y="9" width="4" height="12" />
+                  <circle cx="4" cy="4" r="2" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          {/* Quick Navigation Links */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200">Platform</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <button onClick={() => navigate('/studios')} className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                  Explore Workspaces
+                </button>
               </li>
-            ))}
-          </ul>
+              <li>
+                <button onClick={() => navigate('/add-studio')} className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                  List Your Studio
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/my-bookings')} className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                  Booking Manager
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/my-listings')} className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                  Host Dashboard
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Popular Categories */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200">Categories</h4>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <button onClick={() => navigate('/studios?category=Photo+Studios')} className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                  Photo Studios
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/studios?category=Sound+Stages')} className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                  Sound Stages
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/studios?category=Podcast+Rooms')} className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                  Podcast Rooms
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/studios?category=Music+Suites')} className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                  Music Suites
+                </button>
+              </li>
+              <li>
+                <button onClick={() => navigate('/studios?category=Art+Workshops')} className="hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer">
+                  Art Workshops
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Newsletter Input */}
+          <div className="space-y-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-slate-200">Creator Dispatch</h4>
+            <p className="text-xs text-slate-600 dark:text-slate-400">
+              Receive newly vetted studio openings and exclusive creator production discounts.
+            </p>
+            <form onSubmit={handleSubscribe} className="space-y-2">
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="producer@agency.com"
+                className="w-full px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+              />
+              <button
+                type="submit"
+                className="w-full py-2 px-3 text-xs font-semibold rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white transition-colors cursor-pointer"
+              >
+                Join Dispatch
+              </button>
+            </form>
+          </div>
+
         </div>
+
+        {/* Bottom row: copyright & terms */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+          <p className="text-center sm:text-left">© {new Date().getFullYear()} StudioSpace Technologies Inc. All rights reserved.</p>
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-4 sm:gap-x-6 gap-y-2 text-[11px] sm:text-xs">
+            <span className="hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer">Host Liability Protection</span>
+            <span className="hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer">Terms of Service</span>
+            <span className="hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer">Privacy Policy</span>
+            <span className="hover:text-slate-900 dark:hover:text-slate-200 cursor-pointer">Security Standards</span>
+          </div>
+        </div>
+
       </div>
     </footer>
   );
-}
+};
