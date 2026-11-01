@@ -1,65 +1,123 @@
-'use client';
-
-/**
- * Demo auth: stores the user in localStorage so the Navbar works with no backend.
- * Replace the bodies of login/register/logout with real API calls later;
- * the shape of the context stays the same.
- */
 import React, { createContext, useContext, useEffect, useState } from 'react';
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  photoUrl: string;
-}
+import { User } from '../types/index.ts';
+import { GoogleProfile, signIn, signUp, signOut, signInWithGoogle, getSession } from '../lib/auth-client.ts';
+import { isGoogleConfigured, preloadGoogleScript, requestGoogleAccessToken } from '../lib/google.ts';
+import { toast } from 'sonner';
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string, photoUrl?: string) => Promise<boolean>;
+  loginWithGoogle: (profile?: GoogleProfile) => Promise<boolean>;
+  promptGoogleSignIn: () => void;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-const KEY = 'studiospace_user';
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchCurrentUser = async () => {
     try {
-      const raw = localStorage.getItem(KEY);
-      if (raw) setUser(JSON.parse(raw));
-    } catch {}
-    setLoading(false);
+      const currentUser = await getSession();
+      setUser(currentUser);
+    } catch (err) {
+      console.error('Error fetching current session:', err);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCurrentUser();
+    preloadGoogleScript();
   }, []);
 
-  const save = (u: User | null) => {
-    setUser(u);
-    try { u ? localStorage.setItem(KEY, JSON.stringify(u)) : localStorage.removeItem(KEY); } catch {}
+  const login = async (email: string, password: string): Promise<boolean> => {
+    try {
+      const loggedInUser = await signIn(email, password);
+      setUser(loggedInUser);
+      toast.success(`Welcome back, ${loggedInUser.name}!`);
+      return true;
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to sign in');
+      return false;
+    }
   };
 
-  const login = async (email: string) => {
-    const name = email.split('@')[0] || 'Creator';
-    save({ id: crypto.randomUUID(), name: name[0].toUpperCase() + name.slice(1), email, photoUrl: '' });
-    return true;
+  const register = async (name: string, email: string, password: string, photoUrl?: string): Promise<boolean> => {
+    try {
+      const registeredUser = await signUp(name, email, password, photoUrl);
+      setUser(registeredUser);
+      toast.success(`Account created! Welcome to StudioSpace, ${registeredUser.name}.`);
+      return true;
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to register account');
+      return false;
+    }
   };
 
-  const register = async (name: string, email: string, _password: string, photoUrl = '') => {
-    save({ id: crypto.randomUUID(), name, email, photoUrl });
-    return true;
+  const loginWithGoogle = async (profile?: GoogleProfile): Promise<boolean> => {
+    try {
+      const authedUser = await signInWithGoogle(profile);
+      setUser(authedUser);
+      toast.success(`Signed in as ${authedUser.name} via Google`);
+      return true;
+    } catch (err: any) {
+      toast.error(err.message || 'Google sign-in error');
+      return false;
+    }
   };
 
-  const logout = async () => save(null);
+  // Must run directly inside a click handler so the browser allows the Google popup.
+  const promptGoogleSignIn = () => {
+    if (!isGoogleConfigured) {
+      toast.error('Google sign-in is not set up yet. Please use email and password.');
+      return;
+    }
+    requestGoogleAccessToken()
+      .then((accessToken) => loginWithGoogle({ accessToken }))
+      .catch((err: any) => toast.error(err?.message || 'Google sign-in was cancelled'));
+  };
 
-  return <AuthContext.Provider value={{ user, loading, login, register, logout }}>{children}</AuthContext.Provider>;
-}
+  const logout = async () => {
+    try {
+      await signOut();
+      setUser(null);
+      toast.success('Signed out safely');
+    } catch (err) {
+      console.error('Logout error:', err);
+      setUser(null);
+    }
+  };
 
-export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error('useAuth must be used within an AuthProvider');
-  return ctx;
-}
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        login,
+        register,
+        loginWithGoogle,
+        promptGoogleSignIn,
+        logout,
+        refreshUser: fetchCurrentUser,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};

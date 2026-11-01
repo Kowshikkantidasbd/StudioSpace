@@ -1,12 +1,9 @@
-import React from 'react';
-import { HomePage } from '../pages/HomePage.tsx';
+'use client';
 
-interface PageProps {
-  navigate: (path: string) => void;
-}
+import { HomePage } from '../views/HomePage.tsx';
+import { useNavigate } from '../lib/useNavigate.ts';
 
-export const Page: React.FC<PageProps> = ({ navigate }) => {
+export default function Page() {
+  const navigate = useNavigate();
   return <HomePage navigate={navigate} />;
-};
-
-export default Page;
+}

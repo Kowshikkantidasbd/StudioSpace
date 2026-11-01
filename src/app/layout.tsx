@@ -1,44 +1,44 @@
-import React from 'react';
-import { ThemeProvider, useTheme } from '../context/ThemeContext.tsx';
-import { AuthProvider } from '../context/AuthContext.tsx';
-import { Navbar } from '../components/Navbar.tsx';
-import { Footer } from '../components/Footer.tsx';
-import { Toaster } from 'sonner';
+import type { Metadata, Viewport } from 'next';
+import './globals.css';
+import { AppShell } from '../components/AppShell.tsx';
 
-interface LayoutProps {
-  children: React.ReactNode;
-  currentPath?: string;
-  navigate?: (path: string) => void;
-}
-
-function LayoutContent({ children, currentPath = '/', navigate = () => {} }: LayoutProps) {
-  const { theme } = useTheme();
-
-  return (
-    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors">
-      <Navbar currentPath={currentPath} navigate={navigate} />
-      <main className="flex-1 w-full">
-        {children}
-      </main>
-      <Footer navigate={navigate} />
-      <Toaster
-        theme={theme === 'dark' ? 'dark' : 'light'}
-        position="top-right"
-        richColors
-        closeButton
-      />
-    </div>
-  );
-}
-
-export const RootLayout: React.FC<LayoutProps> = (props) => {
-  return (
-    <ThemeProvider>
-      <AuthProvider>
-        <LayoutContent {...props} />
-      </AuthProvider>
-    </ThemeProvider>
-  );
+export const metadata: Metadata = {
+  title: 'StudioSpace | Peer-to-Peer Creative Workspaces',
+  description:
+    'Peer-to-peer creative workspace platform for booking photo studios, sound stages, podcast rooms, and art workshops.',
+  openGraph: {
+    title: 'StudioSpace | Peer-to-Peer Creative Workspaces',
+    description: 'Book vetted photo studios, sound stages, podcast rooms, and art workshops directly from creators.',
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image' },
 };
 
-export default RootLayout;
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: 'cover',
+};
+
+// Applies the saved light theme before the first paint (dark is the default).
+const themeScript = `try{if(localStorage.getItem('studiospace_theme')==='light')document.documentElement.classList.remove('dark')}catch(e){}`;
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+          rel="stylesheet"
+        />
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body>
+        <AppShell>{children}</AppShell>
+      </body>
+    </html>
+  );
+}

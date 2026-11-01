@@ -93,7 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
               <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
             </svg>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-1">
             <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
               Studio<span className="text-purple-600 dark:text-purple-400">Space</span>
             </span>
