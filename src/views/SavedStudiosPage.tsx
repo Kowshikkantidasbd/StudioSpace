@@ -92,7 +92,7 @@ export const SavedStudiosPage: React.FC<SavedStudiosPageProps> = ({ navigate }) 
         </button>
       </div>
 
-      {/* Grid */}
+      
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 3 }).map((_, i) => (
@@ -116,7 +116,7 @@ export const SavedStudiosPage: React.FC<SavedStudiosPageProps> = ({ navigate }) 
           ))}
         </div>
       ) : (
-        /* Empty State */
+        
         <div className="p-12 text-center rounded-3xl border bg-white dark:bg-slate-800/40 border-slate-200 dark:border-slate-700/60 max-w-lg mx-auto my-8 space-y-4 shadow-sm">
           <div className="w-14 h-14 rounded-2xl bg-red-500/10 text-red-500 flex items-center justify-center mx-auto border border-red-500/20">
             <Heart className="w-7 h-7" />

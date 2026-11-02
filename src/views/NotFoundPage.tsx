@@ -10,7 +10,7 @@ export const NotFoundPage: React.FC<NotFoundPageProps> = ({ navigate }) => {
     <div className="min-h-[75vh] flex items-center justify-center px-4 py-16">
       <div className="text-center max-w-md mx-auto space-y-6">
         
-        {/* Creative Aperture / Studio graphic */}
+        
         <div className="relative w-28 h-28 mx-auto flex items-center justify-center">
           <div className="absolute inset-0 rounded-full bg-indigo-600/10 border-2 border-dashed border-indigo-500/40 animate-spin-slow" />
           <div className="w-20 h-20 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-indigo-600 dark:text-indigo-400 shadow-xl">

@@ -3,7 +3,7 @@
  * Needs NEXT_PUBLIC_GOOGLE_CLIENT_ID. The returned access token is verified by the backend.
  */
 
-const CLIENT_ID: string = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
+const CLIENT_ID: string = process.env.GOOGLE_CLIENT_ID || '';
 const SCRIPT_SRC = 'https://accounts.google.com/gsi/client';
 
 export const isGoogleConfigured = Boolean(CLIENT_ID);

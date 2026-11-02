@@ -22,7 +22,7 @@ export const MyListingsPage: React.FC<MyListingsPageProps> = ({ navigate }) => {
   const [listings, setListings] = useState<Studio[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Deletion modal state
+  
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [studioToDelete, setStudioToDelete] = useState<Studio | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -126,7 +126,7 @@ export const MyListingsPage: React.FC<MyListingsPageProps> = ({ navigate }) => {
         </button>
       </div>
 
-      {/* Listings Table / Cards */}
+      
       {loading ? (
         <div className="p-12 text-center text-slate-500 dark:text-slate-400 text-xs">
           <div className="w-8 h-8 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
@@ -147,7 +147,7 @@ export const MyListingsPage: React.FC<MyListingsPageProps> = ({ navigate }) => {
               key={studio.id}
               className="p-5 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-4 items-center transition-all hover:border-slate-400 dark:hover:border-slate-600"
             >
-              {/* Studio Info */}
+      
               <div className="lg:col-span-5 flex items-center gap-3 sm:gap-4">
                 <img
                   src={studio.imageUrl}
@@ -171,7 +171,7 @@ export const MyListingsPage: React.FC<MyListingsPageProps> = ({ navigate }) => {
                 </div>
               </div>
 
-              {/* Mobile details cluster */}
+              
               <div className="flex lg:contents items-center justify-between border-t border-b lg:border-none py-2.5 lg:py-0 border-slate-100 dark:border-slate-700/60">
                 {/* Category */}
                 <div className="lg:col-span-2 text-xs">
@@ -180,7 +180,7 @@ export const MyListingsPage: React.FC<MyListingsPageProps> = ({ navigate }) => {
                   </span>
                 </div>
 
-                {/* Hourly Rate */}
+                
                 <div className="lg:col-span-2 text-xs">
                   <span className="text-sm sm:text-base font-bold font-mono text-slate-900 dark:text-white tabular-nums">
                     ${studio.hourlyRate}
@@ -188,13 +188,13 @@ export const MyListingsPage: React.FC<MyListingsPageProps> = ({ navigate }) => {
                   <span className="text-slate-500 dark:text-slate-400 ml-1 text-xs">/ hr</span>
                 </div>
 
-                {/* Capacity */}
+                
                 <div className="lg:col-span-1 text-xs text-slate-600 dark:text-slate-300">
                   {studio.capacity} guests
                 </div>
               </div>
 
-              {/* Actions */}
+              
               <div className="lg:col-span-2 flex items-center justify-end gap-2 pt-1 lg:pt-0">
                 <button
                   onClick={() => navigate(`/studios/${studio.id}`)}
@@ -225,7 +225,7 @@ export const MyListingsPage: React.FC<MyListingsPageProps> = ({ navigate }) => {
           ))}
         </div>
       ) : (
-        /* Empty State */
+        
         <div className="p-12 text-center rounded-3xl border bg-white dark:bg-slate-800/40 border-slate-200 dark:border-slate-700/60 max-w-lg mx-auto my-8 space-y-4 shadow-sm">
           <div className="w-14 h-14 rounded-2xl bg-indigo-600/10 dark:bg-indigo-600/20 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto">
             <Building2 className="w-7 h-7" />
@@ -246,7 +246,7 @@ export const MyListingsPage: React.FC<MyListingsPageProps> = ({ navigate }) => {
         </div>
       )}
 
-      {/* Confirmation Modal Before Deleting */}
+      
       <ConfirmDeleteModal
         isOpen={deleteModalOpen}
         title="Delete Studio Listing?"

@@ -56,7 +56,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ navigate }) => {
     reader.readAsDataURL(file);
   };
 
-  // Password validation rules
+  
   const hasUpperCase = /[A-Z]/.test(password);
   const hasLowerCase = /[a-z]/.test(password);
   const hasMinLength = password.length >= 6;
@@ -92,7 +92,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ navigate }) => {
     <div className="min-h-[85vh] flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md rounded-3xl p-8 border bg-white dark:bg-slate-800/90 border-slate-200 dark:border-slate-700 shadow-2xl">
         
-        {/* Brand Lockup */}
+        
         <div className="text-center space-y-2 mb-8">
           <div className="w-12 h-12 rounded-2xl bg-indigo-600/10 dark:bg-indigo-600/20 border border-indigo-500/30 dark:border-indigo-500/40 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mx-auto">
             <UserPlus className="w-6 h-6" />
@@ -105,17 +105,17 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ navigate }) => {
           </p>
         </div>
 
-        {/* Inline Error Message */}
+        
         {formError && (
           <div className="mb-4 p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-600 dark:text-red-400">
             {formError}
           </div>
         )}
 
-        {/* Form */}
+        
         <form onSubmit={handleSubmit} className="space-y-4">
           
-          {/* Full Name */}
+          
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
               Full Name
@@ -133,7 +133,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ navigate }) => {
             </div>
           </div>
 
-          {/* Email Address */}
+          
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
               Email Address
@@ -151,7 +151,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ navigate }) => {
             </div>
           </div>
 
-          {/* Profile Photo (Upload or URL) */}
+          
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -211,7 +211,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ navigate }) => {
             )}
           </div>
 
-          {/* Password */}
+          
           <div>
             <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
               Password
@@ -228,7 +228,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ navigate }) => {
               />
             </div>
 
-            {/* Strict Password Validation Checklist */}
+            
             <div className="mt-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700/60 space-y-1.5 text-[11px]">
               <span className="font-semibold text-slate-600 dark:text-slate-400 block mb-1">Password Requirements:</span>
               
@@ -265,14 +265,14 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ navigate }) => {
           </button>
         </form>
 
-        {/* Divider */}
+        
         <div className="my-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
           <span className="text-[11px] uppercase tracking-wider text-slate-400">or sign up with</span>
           <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
         </div>
 
-        {/* Google Social Button */}
+        
         <button
           type="button"
           onClick={handleGoogle}
@@ -300,7 +300,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ navigate }) => {
           <span>Register with Google</span>
         </button>
 
-        {/* Link to Login */}
+        
         <p className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
           Already have an account?{' '}
           <button

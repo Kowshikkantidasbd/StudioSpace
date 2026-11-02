@@ -33,7 +33,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
-    // Check if in wishlist if user logged in
+
     const checkWishlist = async () => {
       if (!user) return;
       try {
@@ -45,7 +45,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
           }
         }
       } catch {
-        // quiet ignore
+        
       }
     };
     checkWishlist();
@@ -135,7 +135,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-28 lg:pb-8 w-full space-y-8">
       
-      {/* Back button & Breadcrumb */}
+      
       <div className="flex items-center justify-between">
         <button
           onClick={() => navigate('/studios')}
@@ -158,7 +158,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
         </div>
       </div>
 
-      {/* Main Title & Key Info */}
+      
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
@@ -183,7 +183,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
           </div>
         </div>
 
-        {/* Pricing Quick Callout */}
+        
         <div className="flex items-baseline gap-1.5">
           <span className="text-3xl font-extrabold font-mono text-indigo-600 dark:text-indigo-400 tabular-nums">
             ${studio.hourlyRate}
@@ -192,7 +192,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
         </div>
       </div>
 
-      {/* Gallery Slider & Thumbnails */}
+      
       <div className="space-y-3">
         <div className="relative aspect-[16/9] sm:aspect-[21/9] w-full rounded-3xl overflow-hidden bg-slate-950 border border-slate-200 dark:border-slate-700/80 shadow-2xl">
           <img
@@ -205,7 +205,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
             }}
           />
 
-          {/* Navigation Arrows */}
+          
           {gallery.length > 1 && (
             <>
               <button
@@ -230,7 +230,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
           </div>
         </div>
 
-        {/* Thumbnail Row */}
+        
         {gallery.length > 1 && (
           <div className="flex items-center gap-3 overflow-x-auto pb-1">
             {gallery.map((img, idx) => (
@@ -255,13 +255,13 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
         )}
       </div>
 
-      {/* Main Grid: Details (Left 2 cols) vs Contiguous Booking Card (Right 1 col) */}
+      
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         
-        {/* Left Column: Specs, Overview, Amenities, Host Info */}
+
         <div className="lg:col-span-2 space-y-8">
           
-          {/* Specification Badges Grid */}
+          
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="p-3.5 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 shadow-sm">
               <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 text-[11px] mb-1">
@@ -304,7 +304,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
             </div>
           </div>
 
-          {/* Detailed Overview */}
+          
           <div className="space-y-3">
             <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
               Workspace Overview
@@ -314,7 +314,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
             </p>
           </div>
 
-          {/* Amenities & Gear List */}
+          
           <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
             <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">
               Included Amenities & Equipment
@@ -334,7 +334,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
             </div>
           </div>
 
-          {/* Host Information Card */}
+          
           <div className="p-6 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/70 shadow-sm flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <img
@@ -363,7 +363,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
 
         </div>
 
-        {/* Right Column: Contiguous Booking Summary Card */}
+        
         <div className="sticky top-24 p-6 rounded-3xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700/90 shadow-xl space-y-6">
           
           <div className="pb-4 border-b border-slate-200 dark:border-slate-700">
@@ -381,7 +381,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
             </div>
           </div>
 
-          {/* Pricing Breakdown preview */}
+          
           <div className="space-y-2.5 text-xs">
             <div className="flex justify-between text-slate-700 dark:text-slate-300">
               <span>Standard 4-Hour Session</span>
@@ -405,7 +405,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
             </div>
           </div>
 
-          {/* Launch Booking Modal Action */}
+          
           <button
             onClick={() => setIsBookingOpen(true)}
             className="w-full py-3.5 px-4 rounded-xl font-bold text-xs sm:text-sm text-white bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
@@ -421,7 +421,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
 
       </div>
 
-      {/* Mobile Sticky Booking Action Bar */}
+      
       <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 p-3.5 px-4 shadow-[0_-4px_20px_rgba(0,0,0,0.1)] flex items-center justify-between gap-4">
         <div>
           <div className="flex items-baseline gap-1">
@@ -445,7 +445,7 @@ export const StudioDetailsPage: React.FC<StudioDetailsPageProps> = ({ studioId, 
         </button>
       </div>
 
-      {/* Booking Modal with Double-Booking check */}
+      
       <BookingModal
         studio={studio}
         isOpen={isBookingOpen}

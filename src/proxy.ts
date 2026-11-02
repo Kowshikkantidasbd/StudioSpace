@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// The Express backend (backend/index.js). Locally it runs on port 5000.
+
 const BACKEND_URL = (process.env.BACKEND_URL || 'http://localhost:5000').replace(/\/$/, '');
 
-// Change this to the cookie name you found in DevTools.
+
 const COOKIE_NAME = 'token';
 
 export function proxy(request: NextRequest) {
