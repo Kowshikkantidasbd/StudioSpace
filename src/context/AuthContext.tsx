@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User } from '../types/index.ts';
-import { GoogleProfile, signIn, signUp, signOut, signInWithGoogle, getSession } from '../lib/auth-client.ts';
+import { GoogleProfile, signIn, signUp, signOut, signInWithGoogle, getSession, updateProfile as updateProfileApi } from '../lib/auth-client.ts';
 import { isGoogleConfigured, preloadGoogleScript, requestGoogleAccessToken } from '../lib/google.ts';
 import { toast } from 'sonner';
 
@@ -10,7 +10,8 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<boolean>;
   register: (name: string, email: string, password: string, photoUrl?: string) => Promise<boolean>;
   loginWithGoogle: (profile?: GoogleProfile) => Promise<boolean>;
-  promptGoogleSignIn: () => void;
+  promptGoogleSignIn: () => Promise<boolean>;
+  updateProfile: (updates: { name?: string; photoUrl?: string }) => Promise<boolean>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -75,14 +76,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Must run directly inside a click handler so the browser allows the Google popup.
-  const promptGoogleSignIn = () => {
+  // Resolves true when Google sign-in succeeded, false otherwise.
+  const promptGoogleSignIn = async (): Promise<boolean> => {
     if (!isGoogleConfigured) {
       toast.error('Google sign-in is not set up yet. Please use email and password.');
-      return;
+      return false;
     }
-    requestGoogleAccessToken()
-      .then((accessToken) => loginWithGoogle({ accessToken }))
-      .catch((err: any) => toast.error(err?.message || 'Google sign-in was cancelled'));
+    try {
+      const accessToken = await requestGoogleAccessToken();
+      return await loginWithGoogle({ accessToken });
+    } catch (err: any) {
+      toast.error(err?.message || 'Google sign-in was cancelled');
+      return false;
+    }
+  };
+
+  const updateProfile = async (updates: { name?: string; photoUrl?: string }): Promise<boolean> => {
+    try {
+      const updatedUser = await updateProfileApi(updates);
+      setUser(updatedUser);
+      toast.success('Profile updated successfully');
+      return true;
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to update profile');
+      return false;
+    }
   };
 
   const logout = async () => {
@@ -105,6 +123,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         register,
         loginWithGoogle,
         promptGoogleSignIn,
+        updateProfile,
         logout,
         refreshUser: fetchCurrentUser,
       }}

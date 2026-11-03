@@ -84,8 +84,11 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ navigate }) => {
     }
   };
 
-  const handleGoogle = () => {
-    promptGoogleSignIn();
+  const handleGoogle = async () => {
+    const success = await promptGoogleSignIn();
+    if (success) {
+      navigate('/');
+    }
   };
 
   return (

@@ -48,3 +48,11 @@ export async function getSession(): Promise<User | null> {
     return null;
   }
 }
+
+/** Updates the logged-in user's profile (name, photoUrl, etc.). */
+export async function updateProfile(updates: { name?: string; photoUrl?: string }): Promise<User> {
+  return (await authFetch<{ user: User }>('/api/auth/profile', {
+    method: 'PATCH',
+    body: JSON.stringify(updates),
+  })).user;
+}

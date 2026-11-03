@@ -12,7 +12,8 @@ import {
   Menu, 
   X,
   Heart,
-  LayoutDashboard
+  LayoutDashboard,
+  User,
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -175,6 +176,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
                     >
                       <LayoutDashboard className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                       Dashboard
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setDropdownOpen(false);
+                        navigate('/profile');
+                      }}
+                      className="w-full flex items-center gap-2.5 px-4 py-2 text-xs text-left text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700/60 cursor-pointer"
+                    >
+                      <User className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                      Profile
                     </button>
 
                     <button

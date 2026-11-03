@@ -21,14 +21,17 @@ export const LoginPage: React.FC<LoginPageProps> = ({ navigate }) => {
     const success = await login(email, password);
     setLoading(false);
     if (success) {
-      navigate('/studios');
+      navigate('/');
     } else {
       setFormError('Invalid credentials. Please verify your email & password or use demo accounts below.');
     }
   };
 
-  const handleGoogleClick = () => {
-    promptGoogleSignIn();
+  const handleGoogleClick = async () => {
+    const success = await promptGoogleSignIn();
+    if (success) {
+      navigate('/');
+    }
   };
 
   return (
