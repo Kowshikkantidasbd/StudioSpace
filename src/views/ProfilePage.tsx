@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext.tsx';
-import { Mail, User as UserIcon, Image as ImageIcon, Save, ArrowLeft, ArrowRight, Upload, ShieldAlert } from 'lucide-react';
+import { Mail, User as UserIcon, Image as ImageIcon, Save, ArrowLeft, ArrowRight, Upload, ShieldAlert, Key } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ProfilePageProps {
@@ -11,7 +11,12 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigate }) => {
   const { user, loading: authLoading, updateProfile } = useAuth();
   const [name, setName] = useState(user?.name || '');
   const [photoUrl, setPhotoUrl] = useState(user?.photoUrl || '');
+  
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  
   const [saving, setSaving] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (authLoading) {
     return (
@@ -41,37 +46,74 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigate }) => {
     );
   }
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        const base64String = reader.result as string;
+        try {
+          const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ dataUrl: base64String, filename: file.name }),
+          });
+          const data = await res.json();
+          if (res.ok && data.file?.url) {
+            setPhotoUrl(data.file.url);
+            toast.success('Image uploaded successfully! Click Save Changes.');
+          } else {
+            toast.error(data.error || 'Failed to upload image');
+          }
+        } catch (err) {
+          toast.error('Image upload failed');
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (newPassword && !currentPassword) {
+      toast.error('Please enter your current password to set a new password');
+      return;
+    }
+
+    if (newPassword && newPassword.length < 6) {
+      toast.error('New password must be at least 6 characters');
+      return;
+    }
+
     setSaving(true);
     try {
       const success = await updateProfile({
         name: name.trim() || user.name,
         photoUrl: photoUrl.trim() || undefined,
+        currentPassword: currentPassword.trim() || undefined,
+        newPassword: newPassword.trim() || undefined,
       });
+
       if (success) {
         toast.success('Profile updated successfully');
+        setCurrentPassword('');
+        setNewPassword('');
         navigate('/');
       }
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to update profile');
     } finally {
       setSaving(false);
     }
   };
 
-  const initials = user.name
-    .split(' ')
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/40 to-indigo-900 py-8 px-4 sm:px-6 lg:px-8">
-      {/* Decorative background glow */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-purple-600/20 rounded-full blur-[120px] -z-10" />
 
       <div className="max-w-md mx-auto">
-        {/* Back button */}
         <button
           onClick={() => navigate('/')}
           className="mb-8 inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors cursor-pointer"
@@ -80,7 +122,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigate }) => {
           <span>Back to Home</span>
         </button>
 
-        {/* Card */}
         <div className="rounded-3xl border border-slate-800/60 bg-slate-900/80 backdrop-blur-xl p-6 sm:p-8 shadow-2xl">
           <div className="text-center mb-6">
             <div className="w-14 h-14 rounded-full bg-indigo-600/20 border border-indigo-500/40 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-indigo-500/20">
@@ -90,12 +131,11 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigate }) => {
               Profile Settings
             </h1>
             <p className="text-sm text-slate-400">
-              Update your account information below.
+              Update your account information and password below.
             </p>
           </div>
 
           <form onSubmit={handleSave} className="space-y-6">
-            {/* Profile Photo */}
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <ImageIcon className="w-4 h-4 text-slate-500" />
@@ -121,9 +161,17 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigate }) => {
                     className="w-full px-3 py-2 text-xs text-slate-300 bg-slate-800/50 border border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder-slate-500"
                   />
                 </div>
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  onChange={handleFileChange} 
+                  accept="image/*" 
+                  className="hidden" 
+                />
                 <button
                   type="button"
-                  className="px-3 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-500/30 flex items-center gap-1.5"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-3 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-all shadow-lg shadow-indigo-500/30 flex items-center gap-1.5 cursor-pointer"
                 >
                   <Upload className="w-3 h-3" />
                   <span>Change</span>
@@ -131,7 +179,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigate }) => {
               </div>
             </div>
 
-            {/* Full Name */}
             <div className="space-y-2.5">
               <div className="flex items-center gap-2">
                 <UserIcon className="w-4 h-4 text-slate-500" />
@@ -148,7 +195,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigate }) => {
               />
             </div>
 
-            {/* Email Address (read-only) */}
             <div className="space-y-2.5">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-slate-500" />
@@ -162,10 +208,37 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ navigate }) => {
                 readOnly
                 className="w-full px-4 py-3 text-xs text-slate-400 bg-slate-800/30 border border-slate-700/60 rounded-xl cursor-not-allowed"
               />
-              <p className="text-[10px] text-slate-500 flex items-center gap-1">
-                <ShieldAlert className="w-3 h-3 text-amber-500" />
-                <span>Email cannot be changed from here. Contact support to update your email.</span>
-              </p>
+            </div>
+
+            <div className="border-t border-slate-800 pt-5 space-y-4">
+              <div className="flex items-center gap-2">
+                <Key className="w-4 h-4 text-indigo-400" />
+                <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+                  Change Password (Optional)
+                </h3>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[11px] text-slate-400">Current Password</label>
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  placeholder="Enter current password"
+                  className="w-full px-4 py-3 text-xs text-white bg-slate-800/50 border border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 transition-all placeholder-slate-500"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[11px] text-slate-400">New Password</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="Enter new password (min 6 chars)"
+                  className="w-full px-4 py-3 text-xs text-white bg-slate-800/50 border border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 transition-all placeholder-slate-500"
+                />
+              </div>
             </div>
 
             <button
