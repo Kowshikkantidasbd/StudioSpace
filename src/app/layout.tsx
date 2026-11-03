@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <AppShell>{children}</AppShell>
         
         {/* Toaster component jate overlap na kore, tar properties set kore add kora holo */}

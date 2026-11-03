@@ -11,7 +11,7 @@ interface AuthContextType {
   register: (name: string, email: string, password: string, photoUrl?: string) => Promise<boolean>;
   loginWithGoogle: (profile?: GoogleProfile) => Promise<boolean>;
   promptGoogleSignIn: () => Promise<boolean>;
-  updateProfile: (updates: { name?: string; photoUrl?: string }) => Promise<boolean>;
+  updateProfile: (updates: { name?: string; photoUrl?: string; currentPassword?: string; newPassword?: string }) => Promise<boolean>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
