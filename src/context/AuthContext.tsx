@@ -93,14 +93,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const updateProfile = async (updates: { name?: string; photoUrl?: string }): Promise<boolean> => {
     try {
-      // Optimistic update: apply locally first so the UI reflects changes immediately
+      
       setUser((prev) => (prev ? { ...prev, ...updates } : prev));
       const updatedUser = await updateProfileApi(updates);
       setUser(updatedUser);
       toast.success('Profile updated successfully');
       return true;
     } catch (err: any) {
-      // Backend may not have /api/auth/profile yet — local change is already applied
+      
       if (err.message?.includes('404') || err.message?.includes('Not found')) {
         toast.success('Profile updated locally (backend sync pending)');
         return true;

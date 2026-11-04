@@ -11,7 +11,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Dark by default; the saved choice is read after the page loads (no localStorage during server render).
+  
   const [theme, setThemeState] = useState<Theme>('dark');
   const [ready, setReady] = useState(false);
 

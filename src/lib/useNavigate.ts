@@ -3,7 +3,7 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
-/** Returns the `navigate(path)` function the page components expect. */
+
 export function useNavigate() {
   const router = useRouter();
   return useCallback(

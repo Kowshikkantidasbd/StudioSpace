@@ -1,7 +1,4 @@
-/**
- * Auth helpers used by AuthContext. They call the backend (/api/auth/*) through the Next.js
- * rewrite, so the login cookie stays on this site.
- */
+
 import { User } from '../types/index.ts';
 
 export interface GoogleProfile {
@@ -40,7 +37,7 @@ export async function signOut(): Promise<void> {
   await post('/api/auth/logout');
 }
 
-/** Returns the logged-in user, or null when nobody is signed in. */
+
 export async function getSession(): Promise<User | null> {
   try {
     return (await authFetch<{ user: User | null }>('/api/auth/me')).user ?? null;
@@ -49,7 +46,7 @@ export async function getSession(): Promise<User | null> {
   }
 }
 
-/** Updates the logged-in user's profile (name, photoUrl, etc.). */
+
 export async function updateProfile(updates: { name?: string; photoUrl?: string; currentPassword?: string; newPassword?: string }): Promise<User> {
   return (await authFetch<{ user: User }>('/api/auth/profile', {
     method: 'PATCH',
