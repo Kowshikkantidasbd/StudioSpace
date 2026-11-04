@@ -22,7 +22,6 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 };
 
-// Applies the saved light theme before the first paint (dark is the default).
 const themeScript = `try{if(localStorage.getItem('studiospace_theme')==='light')document.documentElement.classList.remove('dark')}catch(e){}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -40,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning>
         <AppShell>{children}</AppShell>
         
-        {/* Sonner Toaster configured to expand and stack multiple toasts properly */}
+
         <Toaster 
           position="top-right" 
           richColors 
