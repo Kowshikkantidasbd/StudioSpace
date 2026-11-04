@@ -195,7 +195,7 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-8">
       
-      {/* Top Breadcrumb */}
+      
       <div className="flex items-center justify-between">
         <button
           onClick={() => navigate('/my-listings')}
@@ -220,7 +220,7 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
 
       <form onSubmit={handleUpdate} className="space-y-8">
         
-        {/* Workspace Info */}
+        
         <div className="p-6 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-5">
           <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
             <Building2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -359,7 +359,7 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
           </div>
         </div>
 
-        {/* Photography & Backend File System */}
+        
         <div className="p-6 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-6">
           <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/80 pb-4">
             <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
@@ -371,7 +371,7 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
             </span>
           </div>
 
-          {/* Primary Cover Image File Upload */}
+          
           <BackendFileUpload
             label="Primary Studio Cover Photo"
             value={imageUrl}
@@ -383,7 +383,7 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
 
           <hr className="border-slate-200 dark:border-slate-700/60" />
 
-          {/* Gallery Multiple Photos File Upload */}
+          
           <GalleryFileUpload
             images={galleryImages}
             onChange={setGalleryImages}
@@ -392,7 +392,6 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
           />
         </div>
 
-        {/* Specifications & Amenities */}
         <div className="p-6 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-4">
           <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
             Specifications & Amenities
@@ -467,7 +466,7 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
           </div>
         </div>
 
-        {/* Action buttons */}
+        
         <div className="flex items-center justify-end gap-4 pt-4">
           <button
             type="button"

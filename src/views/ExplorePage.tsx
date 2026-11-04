@@ -75,7 +75,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ initialCategory, navig
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-8">
       
-      {/* Page Title & Subtitle */}
+      
       <div>
         <span className="text-xs font-semibold tracking-wider uppercase text-indigo-600 dark:text-indigo-400">
           Directory
@@ -88,12 +88,12 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ initialCategory, navig
         </p>
       </div>
 
-      {/* Filter Control Bar */}
+      
       <div className="p-5 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-4">
         
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
           
-          {/* Search Input */}
+          
           <div className="md:col-span-5 relative">
             <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
             <input
@@ -105,7 +105,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ initialCategory, navig
             />
           </div>
 
-          {/* Category Dropdown */}
+          
           <div className="md:col-span-4">
             <select
               value={selectedCategory}
@@ -121,7 +121,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ initialCategory, navig
             </select>
           </div>
 
-          {/* Price Slider Filter */}
+          
           <div className="md:col-span-3 flex flex-col justify-center">
             <div className="flex justify-between items-center text-xs text-slate-700 dark:text-slate-300 mb-1">
               <span className="flex items-center gap-1 text-[11px] font-medium text-slate-500 dark:text-slate-400">
@@ -145,7 +145,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ initialCategory, navig
 
         </div>
 
-        {/* Quick Category Segmented Buttons */}
+        
         <div className="flex items-center gap-1.5 overflow-x-auto pt-2 pb-1 scrollbar-none">
           {CATEGORIES.map(cat => {
             const active = selectedCategory === cat;
@@ -176,14 +176,14 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ initialCategory, navig
 
       </div>
 
-      {/* Results Header Count */}
+      
       <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
         <span>
           Showing <span className="font-mono font-bold text-slate-800 dark:text-slate-200">{studios.length}</span> verified spaces
         </span>
       </div>
 
-      {/* Studios Grid or Empty State */}
+      
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 6 }).map((_, i) => (
@@ -201,7 +201,7 @@ export const ExplorePage: React.FC<ExplorePageProps> = ({ initialCategory, navig
           ))}
         </div>
       ) : (
-        /* Empty State with CTA */
+        
         <div className="p-12 text-center rounded-3xl border bg-white dark:bg-slate-800/40 border-slate-200 dark:border-slate-700/60 max-w-lg mx-auto my-8 space-y-4 shadow-sm">
           <div className="w-14 h-14 rounded-2xl bg-indigo-600/10 dark:bg-indigo-600/20 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto">
             <Building2 className="w-7 h-7" />

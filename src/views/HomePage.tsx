@@ -56,7 +56,7 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
   const [featuredStudios, setFeaturedStudios] = useState<Studio[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch featured studios (MongoDB query .limit(6))
+  
   useEffect(() => {
     const fetchFeatured = async () => {
       try {
@@ -77,10 +77,10 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
   return (
     <div className="w-full flex flex-col space-y-16 pb-20">
       
-      {/* 1. Flagship Sound Stage Hero Section (Exact Design Spec) */}
+      
       <SoundStageHeroSection navigate={navigate} />
 
-      {/* 2. Browse by Studio Categories */}
+      
       <section id="explore-curated-studios" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full scroll-mt-24">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
@@ -100,7 +100,7 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
           </button>
         </div>
 
-        {/* Category Cards Grid */}
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
           {CATEGORIES.map(cat => {
             const Icon = cat.icon;
@@ -128,7 +128,7 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
         </div>
       </section>
 
-      {/* 4. Featured Studios (Dynamic from MongoDB Query .limit(6)) */}
+      
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
@@ -148,7 +148,6 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
           </button>
         </div>
 
-        {/* Studios 3-column Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {loading ? (
             Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
@@ -164,12 +163,12 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
         </div>
       </section>
 
-      {/* 4. Creator Spotlight: Live Podcast & Broadcast Suite */}
+      
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
         <SpotlightHeroBanner navigate={navigate} />
       </section>
 
-      {/* 5. Extra Section 1: How Booking Works (4-Step Workflow) */}
+      
       <section id="how-it-works" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full scroll-mt-24">
         <div className="rounded-3xl p-8 sm:p-12 border bg-white dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 shadow-sm">
           <div className="text-center max-w-xl mx-auto mb-12">
@@ -186,7 +185,7 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative">
             
-            {/* Step 1 */}
+            
             <div className="flex flex-col items-start space-y-3">
               <div className="w-10 h-10 rounded-xl bg-indigo-600/10 dark:bg-indigo-600/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 font-mono font-bold text-sm flex items-center justify-center">
                 01
@@ -199,7 +198,7 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
               </p>
             </div>
 
-            {/* Step 2 */}
+            
             <div className="flex flex-col items-start space-y-3">
               <div className="w-10 h-10 rounded-xl bg-amber-500/10 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-mono font-bold text-sm flex items-center justify-center">
                 02
@@ -212,7 +211,7 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
               </p>
             </div>
 
-            {/* Step 3 */}
+            
             <div className="flex flex-col items-start space-y-3">
               <div className="w-10 h-10 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 font-mono font-bold text-sm flex items-center justify-center">
                 03
@@ -225,7 +224,7 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
               </p>
             </div>
 
-            {/* Step 4 */}
+            
             <div className="flex flex-col items-start space-y-3">
               <div className="w-10 h-10 rounded-xl bg-purple-500/10 dark:bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/30 font-mono font-bold text-sm flex items-center justify-center">
                 04
@@ -242,7 +241,7 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
         </div>
       </section>
 
-      {/* 6. Extra Section 2: Host Guarantee & Creator Support */}
+      
       <section id="about-us" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full scroll-mt-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
           
@@ -296,7 +295,6 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
             </div>
           </div>
 
-          {/* Right visual card showcase */}
           <div className="relative rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-700/80 bg-white dark:bg-slate-900 shadow-xl dark:shadow-2xl p-6 sm:p-8">
             <div className="flex items-center justify-between pb-6 border-b border-slate-100 dark:border-slate-800">
               <div className="flex items-center gap-3">

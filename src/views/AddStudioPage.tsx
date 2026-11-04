@@ -207,7 +207,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
 
       <form onSubmit={handleSubmit} className="space-y-8">
         
-        {/* Section 1: Host Verification (Read-Only) */}
+        
         <div className="p-5 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-900 dark:text-slate-200">
             <ShieldCheck className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
@@ -235,7 +235,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
           </div>
         </div>
 
-        {/* Section 2: General Workspace Info */}
+        
         <div className="p-6 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-5">
           <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
             <Building2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -362,7 +362,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
               </div>
             </div>
 
-            {/* Detailed Overview */}
+            
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Detailed Studio Overview *
@@ -379,7 +379,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
           </div>
         </div>
 
-        {/* Section 3: Photography & Backend File System */}
+        
         <div className="p-6 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-6">
           <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/80 pb-4">
             <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
@@ -391,7 +391,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
             </span>
           </div>
 
-          {/* Primary Cover Image File Upload */}
+          
           <BackendFileUpload
             label="Primary Studio Cover Photo"
             value={imageUrl}
@@ -403,7 +403,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
 
           <hr className="border-slate-200 dark:border-slate-700/60" />
 
-          {/* Gallery Multiple Photos File Upload */}
+          
           <GalleryFileUpload
             images={galleryImages}
             onChange={setGalleryImages}
@@ -412,7 +412,9 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
           />
         </div>
 
-        {/* Section 4: Specifications & Amenities */}
+        
+
+
         <div className="p-6 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-4">
           <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
             Technical Specifications & Amenities
@@ -488,7 +490,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
               })}
             </div>
 
-            {/* Custom Amenity input */}
+            
             <div className="mt-3 flex items-center gap-2 max-w-md">
               <input
                 type="text"
@@ -509,7 +511,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
           </div>
         </div>
 
-        {/* Submit Button */}
+        
         <div className="flex items-center justify-end gap-4 pt-4">
           <button
             type="button"
