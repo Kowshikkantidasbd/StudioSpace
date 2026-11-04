@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { AppShell } from '../components/AppShell.tsx';
-import { Toaster } from 'sonner'; // Sonner toaster import kora holo
+import { Toaster } from 'sonner';
 
 export const metadata: Metadata = {
   title: 'StudioSpace | Peer-to-Peer Creative Workspaces',
@@ -40,7 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning>
         <AppShell>{children}</AppShell>
         
-        {/* Toaster component jate overlap na kore, tar properties set kore add kora holo */}
+        {/* Sonner Toaster configured to expand and stack multiple toasts properly */}
         <Toaster 
           position="top-right" 
           richColors 

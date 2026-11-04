@@ -76,8 +76,7 @@ export const RegisterPage: React.FC<RegisterPageProps> = ({ navigate }) => {
     const success = await register(name, email, password, photoUrl);
     setLoading(false);
     if (success) {
-      toast.success('Registration successful!');
-      // Register korar por direct home page-e redirect korbe
+      // AuthContext theke already success toast asche, tai ekhane extra toast remove kora holo
       navigate('/');
     } else {
       setFormError('Failed to create account. Email may already be in use.');

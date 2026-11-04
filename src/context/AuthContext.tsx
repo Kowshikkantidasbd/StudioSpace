@@ -67,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const authedUser = await signInWithGoogle(profile);
       setUser(authedUser);
-      toast.success(`Signed in as ${authedUser.name} via Google`);
+      // Extra toast remove kora holo jate multiple ba overlapping toast na ashe
       return true;
     } catch (err: any) {
       toast.error(err.message || 'Google sign-in error');
