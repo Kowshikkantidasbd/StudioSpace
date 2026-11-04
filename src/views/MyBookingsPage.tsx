@@ -153,7 +153,7 @@ export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ navigate }) => {
         </button>
       </div>
 
-      {/* Bookings List */}
+      
       {loading ? (
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
@@ -168,7 +168,7 @@ export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ navigate }) => {
               className="p-5 sm:p-6 rounded-2xl border transition-all bg-white dark:bg-slate-800/90 border-slate-200 dark:border-slate-700/80 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6"
             >
               
-              {/* Studio & Time Info */}
+              
               <div className="flex items-start gap-4 flex-1">
                 <img
                   src={booking.studioImage}
@@ -216,7 +216,7 @@ export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ navigate }) => {
                 </div>
               </div>
 
-              {/* Price & Actions */}
+              
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between lg:justify-end gap-3 sm:gap-6 pt-3 lg:pt-0 border-t lg:border-t-0 border-slate-200 dark:border-slate-700/60">
                 <div className="text-left sm:text-left lg:text-right">
                   <div className="flex items-baseline gap-1 lg:justify-end">
@@ -231,7 +231,8 @@ export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ navigate }) => {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-2">
-                  {/* Download PDF Invoice / Receipt */}
+                  
+
                   <button
                     onClick={() => setInvoiceBooking(booking)}
                     title="Download Official Booking Invoice / Receipt"
@@ -265,7 +266,9 @@ export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ navigate }) => {
           ))}
         </div>
       ) : (
-        /* Empty State */
+        
+
+
         <div className="p-12 text-center rounded-3xl border bg-white dark:bg-slate-800/40 border-slate-200 dark:border-slate-700/60 max-w-lg mx-auto my-8 space-y-4 shadow-sm">
           <div className="w-14 h-14 rounded-2xl bg-indigo-600/10 dark:bg-indigo-600/20 border border-indigo-500/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto">
             <Calendar className="w-7 h-7" />
@@ -286,12 +289,16 @@ export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ navigate }) => {
         </div>
       )}
 
-      {/* PDF BOOKING INVOICE MODAL (Optional Requirement) */}
+      
+
+
       {invoiceBooking && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm animate-fadeIn">
           <div className="relative w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
             
-            {/* Modal Controls (Not Printed) */}
+            
+
+
             <div className="p-4 bg-slate-100 dark:bg-slate-800/90 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between print:hidden">
               <span className="text-xs font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
                 <FileText className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -314,10 +321,10 @@ export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ navigate }) => {
               </div>
             </div>
 
-            {/* Printable Invoice Container */}
+            
             <div className="p-8 sm:p-10 overflow-y-auto space-y-6 text-slate-900 dark:text-slate-100 bg-white dark:bg-slate-900 print:p-0 print:m-0">
               
-              {/* Invoice Brand Lockup */}
+              
               <div className="flex items-start justify-between pb-6 border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
@@ -356,7 +363,7 @@ export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ navigate }) => {
                 </div>
               </div>
 
-              {/* Renter & Studio Details Grid */}
+              
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 text-xs pb-6 border-b border-slate-200 dark:border-slate-800">
                 <div>
                   <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block mb-1">
@@ -379,7 +386,7 @@ export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ navigate }) => {
                 </div>
               </div>
 
-              {/* Itemized Calculation Table */}
+              
               <div className="space-y-3">
                 <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">
                   Production Rate Breakdown
@@ -430,7 +437,9 @@ export const MyBookingsPage: React.FC<MyBookingsPageProps> = ({ navigate }) => {
                 </div>
               </div>
 
-              {/* Terms & Host Support Notes */}
+
+
+
               <div className="pt-4 border-t border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 dark:text-slate-400 space-y-1">
                 <p className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-300">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />

@@ -51,7 +51,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ navigate }) => {
           </p>
         </div>
 
-        {/* Google Social Button (Primary One-Tap) */}
+        
         <button
           type="button"
           onClick={handleGoogleClick}
@@ -79,14 +79,15 @@ export const LoginPage: React.FC<LoginPageProps> = ({ navigate }) => {
           <span>Continue with Google</span>
         </button>
 
-        {/* Divider */}
+        
+
         <div className="mb-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
           <span className="text-[10px] uppercase font-semibold tracking-wider text-slate-400">or sign in with email</span>
           <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
         </div>
 
-        {/* Demo Fast Access Accounts (Clean SaaS Style) */}
+        
         <div className="mb-6 p-3 rounded-2xl bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40 text-xs text-slate-800 dark:text-slate-200 space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-indigo-700 dark:text-indigo-400 flex items-center gap-1.5">
@@ -198,7 +199,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ navigate }) => {
           </button>
         </form>
 
-        {/* Link to Register */}
+        
         <p className="mt-6 text-center text-xs text-slate-500 dark:text-slate-400">
           Don't have an account yet?{' '}
           <button
