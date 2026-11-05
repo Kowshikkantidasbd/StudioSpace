@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext.tsx';
-import { Mail, Lock, LogIn, ArrowRight, UserCheck, KeyRound, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, LogIn, ArrowRight, KeyRound, ArrowLeft } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface LoginPageProps {
