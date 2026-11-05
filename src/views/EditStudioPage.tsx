@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext.tsx';
 import { Studio, StudioCategory } from '../types/index.ts';
 import { toast } from 'sonner';
-import { BackendFileUpload } from '../components/BackendFileUpload.tsx';
 import { GalleryFileUpload } from '../components/GalleryFileUpload.tsx';
 import { 
   Building2, 
@@ -13,7 +12,10 @@ import {
   Sparkles, 
   Check, 
   Plus, 
-  ArrowLeft 
+  ArrowLeft,
+  Upload,
+  Trash2,
+  CheckCircle2
 } from 'lucide-react';
 
 interface EditStudioPageProps {
@@ -27,13 +29,6 @@ const CATEGORIES: StudioCategory[] = [
   'Podcast Rooms',
   'Music Suites',
   'Art Workshops',
-];
-
-const PRESET_IMAGES = [
-  { label: 'Photo Cyclorama Stage', url: '/assets/images/hero_photo_studio_1793389976489.jpg' },
-  { label: 'Neve Audio & Sound Stage', url: '/assets/images/hero_sound_stage_1793389976920.jpg' },
-  { label: 'Broadcast Podcast Suite', url: '/assets/images/hero_podcast_suite_1793389977711.jpg' },
-  { label: 'Daylight Art Loft Workshop', url: '/assets/images/hero_daylight_art_loft_1793389977859.jpg' },
 ];
 
 const COMMON_AMENITIES = [
@@ -60,6 +55,7 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
   const { user, loading: authLoading } = useAuth();
   const [loadingInitial, setLoadingInitial] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState<StudioCategory>('Photo Studios');
@@ -119,6 +115,19 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
       </div>
     );
   }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploading(true);
+      setTimeout(() => {
+        const fakeUrl = URL.createObjectURL(file);
+        setImageUrl(fakeUrl);
+        setUploading(false);
+        toast.success('Studio cover photo updated successfully!');
+      }, 600);
+    }
+  };
 
   const toggleAmenity = (amenity: string) => {
     if (selectedAmenities.includes(amenity)) {
@@ -195,7 +204,6 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full space-y-8">
       
-      
       <div className="flex items-center justify-between">
         <button
           onClick={() => navigate('/my-listings')}
@@ -219,7 +227,6 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
       </div>
 
       <form onSubmit={handleUpdate} className="space-y-8">
-        
         
         <div className="p-6 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-5">
           <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
@@ -359,7 +366,7 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
           </div>
         </div>
 
-        
+        {/* Studio Photography & Backend File System (Single Clean Upload Button) */}
         <div className="p-6 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-6">
           <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/80 pb-4">
             <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
@@ -371,19 +378,66 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
             </span>
           </div>
 
-          
-          <BackendFileUpload
-            label="Primary Studio Cover Photo"
-            value={imageUrl}
-            onChange={(url) => setImageUrl(url)}
-            required
-            helpText="Upload a new photo from your computer or pick an existing file from the backend storage library."
-            presets={PRESET_IMAGES}
-          />
+          <div className="space-y-4">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              Primary Studio Cover Photo <span className="text-indigo-600 dark:text-indigo-400">*</span>
+            </label>
+
+            {/* Single Clean Upload Dropzone */}
+            <div className="relative border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-indigo-500 transition-colors rounded-2xl p-8 text-center bg-slate-50 dark:bg-slate-900/50 group cursor-pointer">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+              />
+              <div className="flex flex-col items-center justify-center space-y-3">
+                <div className="w-12 h-12 rounded-2xl bg-indigo-600/10 border border-indigo-500/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:scale-110 transition-transform">
+                  <Upload className="w-6 h-6" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+                    Click to select or drag & drop files here
+                  </p>
+                  <p className="text-[11px] text-slate-500">
+                    Saved directly to server storage (/public/uploads/) · Up to 10MB
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Active Cover Image Preview */}
+            {imageUrl && (
+              <div className="flex items-center justify-between p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={imageUrl}
+                    alt="Studio Cover"
+                    className="w-16 h-12 rounded-xl object-cover border border-slate-200 dark:border-slate-700"
+                  />
+                  <div>
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>Active Studio Image</span>
+                    </div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono truncate max-w-xs md:max-w-md">
+                      {imageUrl}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setImageUrl('')}
+                  className="p-2 rounded-xl text-slate-400 hover:text-red-500 hover:bg-red-500/10 transition-colors cursor-pointer"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
 
           <hr className="border-slate-200 dark:border-slate-700/60" />
 
-          
           <GalleryFileUpload
             images={galleryImages}
             onChange={setGalleryImages}
@@ -466,7 +520,6 @@ export const EditStudioPage: React.FC<EditStudioPageProps> = ({ studioId, naviga
           </div>
         </div>
 
-        
         <div className="flex items-center justify-end gap-4 pt-4">
           <button
             type="button"

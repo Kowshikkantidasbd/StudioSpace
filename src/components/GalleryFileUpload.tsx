@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { UploadCloud, Trash2, Plus, Image as ImageIcon, Check, Star } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAuth } from '../context/AuthContext.tsx';
 
 interface GalleryFileUploadProps {
   images: string[];
@@ -15,10 +16,16 @@ export const GalleryFileUpload: React.FC<GalleryFileUploadProps> = ({
   mainImageUrl,
   onSetMainImage,
 }) => {
+  const { user } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUploadImage = (file: File) => {
+    if (!user) {
+      toast.error('Please sign in to upload photos.');
+      return;
+    }
+
     if (!file.type.startsWith('image/')) {
       toast.error('Only image files are permitted');
       return;
@@ -35,6 +42,7 @@ export const GalleryFileUpload: React.FC<GalleryFileUploadProps> = ({
       try {
         const res = await fetch('/api/upload', {
           method: 'POST',
+          credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             dataUrl: reader.result as string,

@@ -39,25 +39,44 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPath, navigate }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const navLinks = [
-    { label: 'Home', path: '/' },
-    { label: 'Explore Studios', path: '/studios' },
-    { label: 'How It Works', path: '/#how-it-works' },
-    { label: 'About Us', path: '/#about-us' },
-  ];
+  const navLinks = React.useMemo(() => {
+    const baseLinks = [
+      { label: 'Home', path: '/' },
+      { label: 'Explore Studios', path: '/studios' },
+    ];
+    const authLinks = [
+      { label: 'How It Works', path: '/#how-it-works' },
+      { label: 'About Us', path: '/#about-us' },
+    ];
+    return user ? [...baseLinks, ...authLinks] : baseLinks;
+  }, [user]);
 
   const handleNavClick = (path: string) => {
     setMobileMenuOpen(false);
     if (path.startsWith('/#')) {
+      const targetId = path.replace('/#', '');
+      const scrollToSection = () => {
+        const el = document.getElementById(targetId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
       if (currentPath !== '/') {
         navigate('/');
-        setTimeout(() => {
-          const el = document.getElementById(path.replace('/#', ''));
-          el?.scrollIntoView({ behavior: 'smooth' });
-        }, 150);
+        // Retry scrolling until the home page sections are mounted (Next.js navigation can take longer than 150ms)
+        let attempts = 0;
+        const tryScroll = () => {
+          const el = document.getElementById(targetId);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+          } else if (attempts < 15) {
+            attempts += 1;
+            setTimeout(tryScroll, 100);
+          }
+        };
+        setTimeout(tryScroll, 300);
       } else {
-        const el = document.getElementById(path.replace('/#', ''));
-        el?.scrollIntoView({ behavior: 'smooth' });
+        scrollToSection();
       }
     } else {
       navigate(path);

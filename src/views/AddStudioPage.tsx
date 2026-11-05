@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext.tsx';
 import { StudioCategory } from '../types/index.ts';
 import { toast } from 'sonner';
-import { BackendFileUpload } from '../components/BackendFileUpload.tsx';
-import { GalleryFileUpload } from '../components/GalleryFileUpload.tsx';
+import { SimpleStudioUpload } from '../components/Simplestudioupload.tsx';
 import { 
   Building2, 
   MapPin, 
@@ -27,13 +26,6 @@ const CATEGORIES: StudioCategory[] = [
   'Podcast Rooms',
   'Music Suites',
   'Art Workshops',
-];
-
-const PRESET_IMAGES = [
-  { label: 'Photo Cyclorama Stage', url: '/assets/images/hero_photo_studio_1793389976489.jpg' },
-  { label: 'Neve Audio & Sound Stage', url: '/assets/images/hero_sound_stage_1793389976920.jpg' },
-  { label: 'Broadcast Podcast Suite', url: '/assets/images/hero_podcast_suite_1793389977711.jpg' },
-  { label: 'Daylight Art Loft Workshop', url: '/assets/images/hero_daylight_art_loft_1793389977859.jpg' },
 ];
 
 const COMMON_AMENITIES = [
@@ -66,12 +58,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
   const [capacity, setCapacity] = useState<number>(15);
   const [location, setLocation] = useState('');
   const [address, setAddress] = useState('');
-  const [imageUrl, setImageUrl] = useState('/assets/images/hero_photo_studio_1793389976489.jpg');
-  const [galleryImages, setGalleryImages] = useState<string[]>([
-    '/assets/images/hero_photo_studio_1793389976489.jpg',
-    '/assets/images/hero_sound_stage_1793389976920.jpg',
-    '/assets/images/hero_daylight_art_loft_1793389977859.jpg',
-  ]);
+  const [imageUrl, setImageUrl] = useState('');
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([
     'High-Speed 1Gbps Fiber WiFi',
     'Air Conditioning & Climate Control',
@@ -132,16 +119,12 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
     }
 
     if (!imageUrl) {
-      toast.error('Please upload or select a primary studio image');
+      toast.error('Please upload a studio photo');
       return;
     }
 
     setLoading(true);
     try {
-      const allGallery = galleryImages.length > 0 
-        ? (galleryImages.includes(imageUrl) ? galleryImages : [imageUrl, ...galleryImages])
-        : [imageUrl];
-
       const res = await fetch('/api/studios', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -154,7 +137,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
           location,
           address: address || location,
           imageUrl,
-          galleryImages: allGallery,
+          galleryImages: [imageUrl],
           amenities: selectedAmenities,
           overview,
           dimensions,
@@ -207,7 +190,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
 
       <form onSubmit={handleSubmit} className="space-y-8">
         
-        
+        {/* Host Account */}
         <div className="p-5 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-3">
           <div className="flex items-center gap-2 text-xs font-bold text-slate-900 dark:text-slate-200">
             <ShieldCheck className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
@@ -235,7 +218,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
           </div>
         </div>
 
-        
+        {/* General Information */}
         <div className="p-6 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-5">
           <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
             <Building2 className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -362,7 +345,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
               </div>
             </div>
 
-            
+            {/* Overview */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
                 Detailed Studio Overview *
@@ -379,42 +362,16 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
           </div>
         </div>
 
-        
-        <div className="p-6 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-6">
-          <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700/80 pb-4">
-            <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-              <ImageIcon className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-              Studio Photography & Backend File System
-            </h3>
-            <span className="px-2.5 py-1 text-[10px] font-semibold rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800/60">
-              Direct Server Uploads Enabled
-            </span>
-          </div>
-
-          
-          <BackendFileUpload
-            label="Primary Studio Cover Photo"
-            value={imageUrl}
-            onChange={(url) => setImageUrl(url)}
-            required
-            helpText="Upload a high-resolution hero photo from your device directly into the backend storage (/public/uploads/)."
-            presets={PRESET_IMAGES}
-          />
-
-          <hr className="border-slate-200 dark:border-slate-700/60" />
-
-          
-          <GalleryFileUpload
-            images={galleryImages}
-            onChange={setGalleryImages}
-            mainImageUrl={imageUrl}
-            onSetMainImage={(url) => setImageUrl(url)}
-          />
+        {/* Studio Photo (single upload button) */}
+        <div className="p-6 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-4">
+          <h3 className="text-base font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+            <ImageIcon className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+            Studio Photo *
+          </h3>
+          <SimpleStudioUpload value={imageUrl} onChange={setImageUrl} />
         </div>
 
-        
-
-
+        {/* Technical Specifications & Amenities */}
         <div className="p-6 rounded-2xl border bg-white dark:bg-slate-800/80 border-slate-200 dark:border-slate-700/70 shadow-sm space-y-4">
           <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
             Technical Specifications & Amenities
@@ -490,7 +447,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
               })}
             </div>
 
-            
+            {/* Custom amenity */}
             <div className="mt-3 flex items-center gap-2 max-w-md">
               <input
                 type="text"
@@ -511,7 +468,7 @@ export const AddStudioPage: React.FC<AddStudioPageProps> = ({ navigate }) => {
           </div>
         </div>
 
-        
+        {/* Actions */}
         <div className="flex items-center justify-end gap-4 pt-4">
           <button
             type="button"

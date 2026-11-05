@@ -67,7 +67,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const authedUser = await signInWithGoogle(profile);
       setUser(authedUser);
-      // Extra toast remove kora holo jate multiple ba overlapping toast na ashe
       return true;
     } catch (err: any) {
       toast.error(err.message || 'Google sign-in error');
@@ -75,8 +74,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  // Must run directly inside a click handler so the browser allows the Google popup.
-  // Resolves true when Google sign-in succeeded, false otherwise.
   const promptGoogleSignIn = async (): Promise<boolean> => {
     if (!isGoogleConfigured) {
       toast.error('Google sign-in is not set up yet. Please use email and password.');
@@ -91,16 +88,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const updateProfile = async (updates: { name?: string; photoUrl?: string }): Promise<boolean> => {
+  const updateProfile = async (updates: { name?: string; photoUrl?: string; currentPassword?: string; newPassword?: string }): Promise<boolean> => {
     try {
-      
       setUser((prev) => (prev ? { ...prev, ...updates } : prev));
       const updatedUser = await updateProfileApi(updates);
       setUser(updatedUser);
       toast.success('Profile updated successfully');
       return true;
     } catch (err: any) {
-      
       if (err.message?.includes('404') || err.message?.includes('Not found')) {
         toast.success('Profile updated locally (backend sync pending)');
         return true;

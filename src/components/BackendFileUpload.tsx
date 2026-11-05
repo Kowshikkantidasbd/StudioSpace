@@ -12,6 +12,7 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAuth } from '../context/AuthContext.tsx';
 
 export interface BackendFile {
   filename: string;
@@ -37,6 +38,7 @@ export const BackendFileUpload: React.FC<BackendFileUploadProps> = ({
   helpText = 'Upload files directly to the server backend file system or select from storage.',
   presets = [],
 }) => {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<'upload' | 'storage' | 'link'>('upload');
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -54,7 +56,9 @@ export const BackendFileUpload: React.FC<BackendFileUploadProps> = ({
   const fetchBackendFiles = async () => {
     setLoadingFiles(true);
     try {
-      const res = await fetch('/api/upload');
+      const res = await fetch('/api/upload', {
+        credentials: 'include',
+      });
       if (res.ok) {
         const data = await res.json();
         setServerFiles(data.files || []);
@@ -81,6 +85,11 @@ export const BackendFileUpload: React.FC<BackendFileUploadProps> = ({
   };
 
   const handleProcessFile = (file: File) => {
+    if (!user) {
+      toast.error('Please sign in to upload photos.');
+      return;
+    }
+
     if (!file.type.startsWith('image/')) {
       toast.error('Only image files (JPG, PNG, WebP, GIF, SVG) are permitted');
       return;
@@ -102,6 +111,7 @@ export const BackendFileUpload: React.FC<BackendFileUploadProps> = ({
       try {
         const response = await fetch('/api/upload', {
           method: 'POST',
+          credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             dataUrl,
@@ -175,6 +185,7 @@ export const BackendFileUpload: React.FC<BackendFileUploadProps> = ({
     try {
       const res = await fetch(`/api/upload/${filename}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
       if (res.ok) {
         toast.success(`File "${filename}" removed from backend`);
